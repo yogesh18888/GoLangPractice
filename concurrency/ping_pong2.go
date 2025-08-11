@@ -23,7 +23,7 @@ func ping(pingCh chan<- string, pongChan <-chan string, wg *sync.WaitGroup) {
 	for i := 0; i < 5; i++ {
 		pingCh <- "ping"
 		msg := <-pongChan
-		fmt.Println("message received:", msg)
+		fmt.Println("ping message received:", msg)
 	}
 }
 
@@ -31,7 +31,7 @@ func pong(pingCh <-chan string, pongCh chan<- string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := 0; i < 5; i++ {
 		msg := <-pingCh
-		fmt.Println("message received:", msg)
+		fmt.Println("pong message received:", msg)
 		pongCh <- "pong"
 	}
 }

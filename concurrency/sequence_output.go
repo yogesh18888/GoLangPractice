@@ -41,6 +41,7 @@ func main() {
 			<-ch2
 			result1[i] = input[i]
 			if i+1 < len(input) {
+				fmt.Println("entered here:", result1[i])
 				ch1 <- true // signal goroutine 1
 			}
 		}

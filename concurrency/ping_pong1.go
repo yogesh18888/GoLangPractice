@@ -7,8 +7,8 @@ import (
 
 // this program will have a deadlock! use buffer channel instead
 func main() {
-	ping := make(chan string)
-	pong := make(chan string)
+	ping := make(chan string, 5)
+	pong := make(chan string, 5)
 	wg := sync.WaitGroup{}
 	exchanges := 5
 	wg.Add(2)
