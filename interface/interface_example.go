@@ -35,7 +35,7 @@ func (m MarathiSpeaker) SayHello() string {
 	return "Namaste! " + m.Name
 }
 
-// Test This method is specific to MarathiSpeaker struct. This is not a common behaviour
+// Test(): This method is specific to MarathiSpeaker struct. This is not a common behaviour
 // so in order to call this method we need to assert it
 func (m MarathiSpeaker) Test() {
 	fmt.Println("Test")

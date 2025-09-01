@@ -31,7 +31,8 @@ func main() {
 		fmt.Println("context canceled, stopping goroutine2")
 	}()
 
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 3)
+	fmt.Println("signalling all goroutines who are using ctx after 3 seconds")
 	cancel() //All goroutines receive signal when this gets executed after 5 seconds from: <-ctx.Done()
 	time.Sleep(time.Millisecond * 500)
 }

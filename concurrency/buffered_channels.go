@@ -12,7 +12,7 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		for i := 1; i <= 8; i++ {
+		for i := 1; i <= 10; i++ {
 			fmt.Println(fmt.Sprintf("sending hello %d", i))
 			ch <- fmt.Sprintf("hello %d", i)
 		}

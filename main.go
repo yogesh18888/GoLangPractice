@@ -1,41 +1,38 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-)
+import "fmt"
+
+// Custom error type for file operations
+type FileError struct {
+	Filename string
+	Op       string // Operation: "open", "read", "write"
+	Err      error  // The underlying error
+}
+
+func (e FileError) Error() string {
+	return fmt.Sprintf("file error: failed to %s %s: %v", e.Op, e.Filename, e.Err)
+}
+
+// Example function returning a custom error
+func openFile(filename string) (string, error) {
+	if filename == "non_existent.txt" {
+		// Simulate a file not found error
+		return "", FileError{
+			Filename: filename,
+			Op:       "open",
+			Err:      fmt.Errorf("file not found on disk"), // Underlying error
+		}
+	}
+	return "file_content", nil
+}
 
 func main() {
-	wg := sync.WaitGroup{}
-	ch := make(chan string)
-
-	wg.Add(1)
-	go receive(&wg, ch)
-
-	wg.Add(1)
-	go send(&wg, ch)
-
-	wg.Wait()
-
-	fmt.Println("\nDifferences with escape sequences:")
-	fmt.Println("Interpreted: \"Hello\\nWorld\" ->", "Hello\nWorld")
-	fmt.Println("Raw:         `Hello\\nWorld` ->", `Hello\nWorld`)
-
-	s := "hello"
-	// s[0] = 'H' // This would be a compile-time error: cannot assign to s[0]
-	s = s + " world" // This creates a *new* string and assigns it to 's'
-	fmt.Println(s)
-
-}
-
-func send(wg *sync.WaitGroup, ch chan<- string) {
-	defer wg.Done()
-	ch <- "Hello World"
-	close(ch)
-}
-
-func receive(wg *sync.WaitGroup, ch <-chan string) {
-	defer wg.Done()
-	msg := <-ch
-	fmt.Println(msg)
+	_, err := openFile("non_existent.txt")
+	if err != nil {
+		fmt.Println(err) // Output: file error: failed to open non_existent.txt: file not found on disk
+		// You can use a type assertion to check if it's your custom error
+		if fe, ok := err.(*FileError); ok {
+			fmt.Printf("Specific FileError: Filename=%s, Operation=%s\n", fe.Filename, fe.Op)
+		}
+	}
 }
